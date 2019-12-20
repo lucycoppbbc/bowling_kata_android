@@ -1,10 +1,6 @@
 package com.example.bowling_kata
 
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
 import org.junit.Test
-import org.mockito.Mock
-import kotlin.test.assert
 import kotlin.test.assertEquals
 
 class GameTest {
@@ -14,6 +10,13 @@ class GameTest {
     fun `score is reset on initialisation`() {
         val game = Game()
         assertEquals(game.score(), 0)
+    }
+
+    @Test
+    fun `frames are reset on initialisation`() {
+        val game = Game()
+        val emptyFrames = ArrayList<frame>()
+        assertEquals(game.frames(), emptyFrames)
     }
 
 
@@ -38,6 +41,8 @@ class GameTest {
         game.rolls(1)
         assertEquals(game.score(), 2)
     }
+
+
 
 
 
