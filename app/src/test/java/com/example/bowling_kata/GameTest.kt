@@ -62,17 +62,6 @@ class GameTest {
     }
 
     @Test
-    fun `players third score is added when its the final turn`() {
-        val game = Game()
-        rollBasicTurn(game, 9)
-        game.rolls(1) //first roll of final frame
-        game.rolls(2) //second roll of final frame
-        game.rolls(3) //third roll of final frame
-        val currentFrame = game.getCurrentFrame(10)
-        assertEquals(currentFrame.roll_three, 3)
-    }
-
-    @Test
     fun `score correct for simple game`() {
         val game = Game()
         rollBasicTurn(game, 10)
@@ -152,7 +141,77 @@ class GameTest {
         rollSpare(game)
         rollBasicTurn(game, 1)
         assertEquals(33, game.score())
+    }
 
+    @Test
+    fun `when it is the final turn, and a strike is scored the player should get three bowls`() {
+        val game = Game()
+        rollBasicTurn(game, 9)
+        rollStrike(game)
+        game.rolls(1)
+        assertEquals(false, game.isGameOver())
+        game.rolls(1)
+        assertEquals(true, game.isGameOver())
+    }
+
+    @Test
+    fun `when it is the final turn, and a spare is scored the player should get three bowls`() {
+        val game = Game()
+        rollBasicTurn(game, 9)
+        rollSpare(game)
+        assertEquals(false, game.isGameOver())
+        game.rolls(1)
+        assertEquals(true, game.isGameOver())
+    }
+
+    @Test
+    fun `when it is the final turn, and neither a strike or spare  is scored the player should get two bowls`() {
+        val game = Game()
+        rollBasicTurn(game, 9)
+        game.rolls(1)
+        game.rolls(2)
+        assertEquals(true, game.isGameOver())
+    }
+
+    @Test
+    fun `when scoring three strikes in final turn, score is as expected`() {
+        val game = Game()
+        for(x in 1..9) {
+            game.rolls(0)
+            game.rolls(0)
+        }
+        rollStrike(game)
+        rollStrike(game)
+        rollStrike(game)
+        //score should be 10 + 20 + 20
+        assertEquals(50, game.score())
+    }
+
+    @Test
+    fun `when scoring a spare in final turn, score is as expected`(){
+        val game = Game()
+        for(x in 1..9) {
+            game.rolls(0)
+            game.rolls(0)
+        }
+        rollSpare(game)
+        game.rolls(3)
+        //score should be 5 + 5 + 6
+        assertEquals(16, game.score())
+    }
+
+    @Test
+    fun `when not scoring a spare or strike, score is as expected`() {
+        val game = Game()
+        for(x in 1..9) {
+            game.rolls(0)
+            game.rolls(0)
+        }
+        game.rolls(1)
+        game.rolls(2)
+        game.rolls(3)
+        //score should be 1 + 2
+        assertEquals(3, game.score())
     }
 
     fun rollBasicTurn(game: Game, numberOfTurns: Int) {
@@ -161,6 +220,7 @@ class GameTest {
             game.rolls(1)
         }
     }
+
 
     fun rollStrike(game: Game) {
         game.rolls(10)

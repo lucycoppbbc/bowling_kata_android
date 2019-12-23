@@ -1,6 +1,5 @@
 package com.example.bowling_kata
 
-import android.util.Log
 
 class Game {
     private var score: Int = 0
@@ -8,6 +7,8 @@ class Game {
     private val numberOfTurns = 10
     private var currentTurn = 1
     private var numberOfBonusRolls = 0
+    private var gameOver = false
+
 
 
     init {
@@ -17,9 +18,15 @@ class Game {
 
 
     fun rolls(pins: Int) {
-        score += pins
-        updateFrame(pins, currentTurn)
+        if(!isGameOver()) {
+            score += pins
+            updateFrame(pins, currentTurn)
+        }
 
+    }
+
+    fun isGameOver(): Boolean {
+        return gameOver
     }
 
     private fun updateNumberOfBonusRolls(bonus: Bonus) {
@@ -46,12 +53,22 @@ class Game {
 
     private fun handleSecondRoll(frame: Frame, pins: Int) {
         frame.roll_two = pins
-        frame.roll_one?.let {
-            if(it + pins == 10) {
+        val firstRoll = frame.roll_one ?: 0
+        val spare = firstRoll + pins == 10
+        if(currentTurn == numberOfTurns) {
+            val strike = pins == 10
+            val noStrikeScored = firstRoll != 10
+            when {
+                spare -> updateNumberOfBonusRolls(Bonus.SPARE)
+                strike -> updateNumberOfBonusRolls(Bonus.STRIKE)
+                noStrikeScored -> gameOver()
+            }
+        } else {
+            if(spare) {
                 updateNumberOfBonusRolls(Bonus.SPARE)
             }
+            currentTurn++
         }
-        if (currentTurn < numberOfTurns) currentTurn++
     }
 
     private fun handleThirdRoll(frame: Frame, pins: Int) {
@@ -60,17 +77,17 @@ class Game {
 
     }
     private fun gameOver() {
-
+        gameOver = true
     }
 
     fun updateFrame(pins: Int, turn: Int) {
         val currentFrame = getCurrentFrame(turn)
-        var frames = getFrames()
         addAnyBonusPoints(pins)
         when {
             currentFrame.roll_one == null -> handleFirstRoll(currentFrame, pins)
             currentFrame.roll_two == null -> handleSecondRoll(currentFrame, pins)
             currentFrame.roll_three == null && turn == numberOfTurns -> handleThirdRoll(currentFrame, pins)
+            else -> gameOver()
         }
     }
 
@@ -78,12 +95,7 @@ class Game {
         return score
     }
 
-    fun getFrames(): Array<Frame> {
-        return frames
-    }
-
     fun getCurrentFrame(turn: Int): Frame {
-        //TODO find a nicer way of doing this
         return frames.filter { it.turn == turn }[0]
     }
 
