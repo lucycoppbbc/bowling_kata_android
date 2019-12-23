@@ -13,14 +13,6 @@ class GameTest {
     }
 
     @Test
-    fun `frames are reset on initialisation`() {
-        val game = Game()
-        val emptyFrames = ArrayList<frame>()
-        assertEquals(game.frames(), emptyFrames)
-    }
-
-
-    @Test
     fun `player scores no points`() {
         val game = Game()
         game.rolls(0)
@@ -40,6 +32,14 @@ class GameTest {
         game.rolls(1)
         game.rolls(1)
         assertEquals(game.score(), 2)
+    }
+
+    @Test
+    fun `players first score is added to current frame`() {
+        val game = Game()
+        game.rolls(1)
+        val currentFrame = game.getCurrentFrame(1)
+        assertEquals(currentFrame.roll_one, 1)
     }
 
 
