@@ -5,7 +5,8 @@ import android.util.Log
 class Game {
     private var score: Int = 0
     private lateinit var frames: Array<Frame>
-    private var turn = 1
+    private val numberOfTurns = 10
+    private var currentTurn = 1
 
     init {
         resetScore()
@@ -15,12 +16,20 @@ class Game {
 
     fun rolls(pins: Int) {
         score += pins
-        updateFrame(pins)
+        updateFrame(pins, currentTurn)
 
     }
 
-    fun updateFrame(pins: Int) {
-        getCurrentFrame(turn).roll_one = pins
+    fun updateFrame(pins: Int, turn: Int) {
+        val currentFrame = getCurrentFrame(turn)
+        when {
+            currentFrame.roll_one == null -> currentFrame.roll_one = pins
+            currentFrame.roll_two == null -> {
+                currentFrame.roll_two = pins
+                if (turn < numberOfTurns) currentTurn++
+            }
+            currentFrame.roll_three == null && turn == numberOfTurns -> currentFrame.roll_three = pins
+        }
     }
 
     fun score(): Int {
@@ -46,7 +55,7 @@ class Game {
     }
 
     fun resetFrames() {
-        frames = Array(10) { makeFrame(it+1) }
+        frames = Array(numberOfTurns) { makeFrame(it+1) }
 
     }
 }
