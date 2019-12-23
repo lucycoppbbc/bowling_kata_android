@@ -79,6 +79,27 @@ class GameTest {
         assertEquals(20, game.score())
     }
 
+    @Test
+    fun `when a player gets a strike, the current turn moves on if its not the final frame`() {
+        val game = Game()
+        game.rolls(10)
+        game.rolls(1)
+        var firstFrame = game.getCurrentFrame(1)
+        var secondFrame = game.getCurrentFrame(2)
+        assertEquals(null, firstFrame.roll_two)
+        assertEquals(1, secondFrame.roll_one)
+    }
+
+    @Test
+    fun `when a player gets a strike, bonus is added of the next two rolls`() {
+        val game = Game()
+        game.rolls(10) //player gets strike
+        game.rolls(1)
+        game.rolls(1)
+        //bonus should be 2
+        assertEquals(14, game.score())
+    }
+
     fun playGame(game: Game, numberOfTurns: Int) {
         for(x in 1..numberOfTurns) {
             game.rolls(1)

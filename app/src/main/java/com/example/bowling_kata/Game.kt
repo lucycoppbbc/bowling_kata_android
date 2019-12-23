@@ -7,6 +7,8 @@ class Game {
     private lateinit var frames: Array<Frame>
     private val numberOfTurns = 10
     private var currentTurn = 1
+    private var numberOfBonusRolls = 0
+
 
     init {
         resetScore()
@@ -20,10 +22,33 @@ class Game {
 
     }
 
+    private fun updateNumberOfBonusRolls(bonus: Bonus) {
+        when(bonus){
+            Bonus.STRIKE -> numberOfBonusRolls += 2
+            Bonus.SPARE -> numberOfBonusRolls += 1
+        }
+    }
+
+    private fun addAnyBonusPoints(pins: Int) {
+        if(numberOfBonusRolls > 0) {
+            score += pins
+            numberOfBonusRolls--
+        }
+    }
+
+    private fun handleFirstRoll(frame: Frame, pins: Int) {
+        frame.roll_one = pins
+        if (pins == 10) {
+            updateNumberOfBonusRolls(Bonus.STRIKE)
+            if (currentTurn != numberOfTurns) currentTurn++
+        }
+    }
+
     fun updateFrame(pins: Int, turn: Int) {
         val currentFrame = getCurrentFrame(turn)
+        addAnyBonusPoints(pins)
         when {
-            currentFrame.roll_one == null -> currentFrame.roll_one = pins
+            currentFrame.roll_one == null -> handleFirstRoll(currentFrame, pins)
             currentFrame.roll_two == null -> {
                 currentFrame.roll_two = pins
                 if (turn < numberOfTurns) currentTurn++
@@ -60,5 +85,5 @@ class Game {
     }
 }
 
-data class Frame(var turn: Int, var roll_one: Int?, var roll_two: Int?, var roll_three: Int?) {
-}
+data class Frame(var turn: Int, var roll_one: Int?, var roll_two: Int?, var roll_three: Int?) {}
+enum class Bonus { SPARE, STRIKE }
