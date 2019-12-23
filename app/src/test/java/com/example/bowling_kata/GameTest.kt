@@ -72,6 +72,13 @@ class GameTest {
         assertEquals(currentFrame.roll_three, 3)
     }
 
+    @Test
+    fun `score correct for simple game`() {
+        val game = Game()
+        playGame(game, 10)
+        assertEquals(20, game.score())
+    }
+
     fun playGame(game: Game, numberOfTurns: Int) {
         for(x in 1..numberOfTurns) {
             game.rolls(1)
