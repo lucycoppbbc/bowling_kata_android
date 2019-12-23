@@ -214,7 +214,7 @@ class GameTest {
         assertEquals(3, game.score())
     }
 
-    fun rollBasicTurn(game: Game, numberOfTurns: Int) {
+    private fun rollBasicTurn(game: Game, numberOfTurns: Int) {
         for(x in 1..numberOfTurns) {
             game.rolls(1)
             game.rolls(1)
@@ -222,11 +222,11 @@ class GameTest {
     }
 
 
-    fun rollStrike(game: Game) {
+    private fun rollStrike(game: Game) {
         game.rolls(10)
     }
 
-    fun rollSpare(game: Game) {
+    private fun rollSpare(game: Game) {
         game.rolls(5)
         game.rolls(5)
     }

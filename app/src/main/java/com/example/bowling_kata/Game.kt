@@ -75,13 +75,14 @@ class Game {
         gameOver = true
     }
 
-    fun updateFrame(pins: Int, turn: Int) {
+    private fun updateFrame(pins: Int, turn: Int) {
         val currentFrame = getCurrentFrame(turn)
+        val finalTurn = turn == numberOfTurns
         addAnyBonusPoints(pins)
         when {
             currentFrame.roll_one == null -> handleFirstRoll(currentFrame, pins)
             currentFrame.roll_two == null -> handleSecondRoll(currentFrame, pins)
-            currentFrame.roll_three == null && turn == numberOfTurns -> handleThirdRoll(currentFrame, pins)
+            currentFrame.roll_three == null && finalTurn -> handleThirdRoll(currentFrame, pins)
             else -> gameOver()
         }
     }
