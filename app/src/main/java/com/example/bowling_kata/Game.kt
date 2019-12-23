@@ -37,12 +37,23 @@ class Game {
     }
 
     private fun handleFirstRoll(frame: Frame, pins: Int) {
-
         frame.roll_one = pins
         if (pins == 10) {
             updateNumberOfBonusRolls(Bonus.STRIKE)
             if (currentTurn != numberOfTurns) currentTurn++
         }
+    }
+
+    private fun handleSecondRoll(frame: Frame, pins: Int) {
+        frame.roll_two = pins
+        frame.roll_one?.let {
+            if(it + pins == 10) {
+                updateNumberOfBonusRolls(Bonus.SPARE)
+            }
+        }
+        if (currentTurn < numberOfTurns) currentTurn++
+
+
     }
 
     fun updateFrame(pins: Int, turn: Int) {
@@ -51,10 +62,7 @@ class Game {
         addAnyBonusPoints(pins)
         when {
             currentFrame.roll_one == null -> handleFirstRoll(currentFrame, pins)
-            currentFrame.roll_two == null -> {
-                currentFrame.roll_two = pins
-                if (turn < numberOfTurns) currentTurn++
-            }
+            currentFrame.roll_two == null -> handleSecondRoll(currentFrame, pins)
             currentFrame.roll_three == null && turn == numberOfTurns -> currentFrame.roll_three = pins
         }
     }
