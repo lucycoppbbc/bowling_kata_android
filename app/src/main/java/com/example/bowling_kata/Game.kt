@@ -9,8 +9,6 @@ class Game {
     private var numberOfBonusRolls = 0
     private var gameOver = false
 
-
-
     init {
         resetScore()
         resetFrames()
@@ -100,15 +98,15 @@ class Game {
     }
 
 
-    fun resetScore() {
+    private fun resetScore() {
         score = 0
     }
     
-    fun makeFrame(turn: Int): Frame {
+    private fun makeFrame(turn: Int): Frame {
         return Frame(turn, null, null, null)
     }
 
-    fun resetFrames() {
+    private fun resetFrames() {
         frames = Array(numberOfTurns) { makeFrame(it+1) }
 
     }
