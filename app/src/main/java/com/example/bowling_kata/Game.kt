@@ -28,10 +28,7 @@ class Game {
     }
 
     private fun updateNumberOfBonusRolls(bonus: Bonus) {
-        when(bonus){
-            Bonus.STRIKE -> numberOfBonusRolls += 2
-            Bonus.SPARE -> numberOfBonusRolls += 1
-        }
+        numberOfBonusRolls += bonus.numberOfBonusRolls
     }
 
     private fun addAnyBonusPoints(pins: Int) {
@@ -113,4 +110,4 @@ class Game {
 }
 
 data class Frame(var turn: Int, var roll_one: Int?, var roll_two: Int?, var roll_three: Int?) {}
-enum class Bonus { SPARE, STRIKE }
+enum class Bonus(val numberOfBonusRolls: Int) { SPARE(1), STRIKE(2) }
