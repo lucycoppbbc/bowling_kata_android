@@ -100,6 +100,28 @@ class GameTest {
         assertEquals(14, game.score())
     }
 
+    @Test
+    fun `when a player gets two strikes in a row, score is as expected`() {
+        val game = Game()
+        game.rolls(10)
+        game.rolls(10)
+        playGame(game, 2)
+        //score should be 10 + 20 + 2 + 2 + 2 + 1
+        assertEquals(37, game.score())
+
+    }
+
+    @Test
+    fun `when a player gets three strikes in a row, score is as expected`() {
+        val game = Game()
+        game.rolls(10)
+        game.rolls(10)
+        game.rolls(10)
+        playGame(game, 3)
+        //score should be 10 + 20 + 20 + 2 + 2 + 2 + 2 + 1 + 1
+        assertEquals(60, game.score())
+    }
+
     fun playGame(game: Game, numberOfTurns: Int) {
         for(x in 1..numberOfTurns) {
             game.rolls(1)

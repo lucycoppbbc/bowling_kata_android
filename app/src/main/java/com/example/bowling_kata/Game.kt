@@ -37,6 +37,7 @@ class Game {
     }
 
     private fun handleFirstRoll(frame: Frame, pins: Int) {
+
         frame.roll_one = pins
         if (pins == 10) {
             updateNumberOfBonusRolls(Bonus.STRIKE)
@@ -46,6 +47,7 @@ class Game {
 
     fun updateFrame(pins: Int, turn: Int) {
         val currentFrame = getCurrentFrame(turn)
+        var frames = getFrames()
         addAnyBonusPoints(pins)
         when {
             currentFrame.roll_one == null -> handleFirstRoll(currentFrame, pins)
