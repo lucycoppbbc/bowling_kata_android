@@ -145,6 +145,16 @@ class GameTest {
         assertEquals(43, game.score())
     }
 
+    @Test
+    fun `when a player gets a strike, then a spare, score is as expected`() {
+        val game = Game()
+        rollStrike(game)
+        rollSpare(game)
+        rollBasicTurn(game, 1)
+        assertEquals(33, game.score())
+
+    }
+
     fun rollBasicTurn(game: Game, numberOfTurns: Int) {
         for(x in 1..numberOfTurns) {
             game.rolls(1)

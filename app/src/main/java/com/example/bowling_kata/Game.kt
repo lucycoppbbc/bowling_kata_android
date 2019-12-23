@@ -52,7 +52,14 @@ class Game {
             }
         }
         if (currentTurn < numberOfTurns) currentTurn++
+    }
 
+    private fun handleThirdRoll(frame: Frame, pins: Int) {
+        frame.roll_three = pins
+        gameOver()
+
+    }
+    private fun gameOver() {
 
     }
 
@@ -63,7 +70,7 @@ class Game {
         when {
             currentFrame.roll_one == null -> handleFirstRoll(currentFrame, pins)
             currentFrame.roll_two == null -> handleSecondRoll(currentFrame, pins)
-            currentFrame.roll_three == null && turn == numberOfTurns -> currentFrame.roll_three = pins
+            currentFrame.roll_three == null && turn == numberOfTurns -> handleThirdRoll(currentFrame, pins)
         }
     }
 
