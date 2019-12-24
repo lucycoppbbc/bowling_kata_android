@@ -14,13 +14,11 @@ class Game {
         resetFrames()
     }
 
-
     fun rolls(pins: Int) {
         if(!isGameOver()) {
             score += pins
             updateFrame(pins, currentTurn)
         }
-
     }
 
     fun isGameOver(): Boolean {
